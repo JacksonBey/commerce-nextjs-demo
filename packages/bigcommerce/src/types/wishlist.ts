@@ -1,6 +1,6 @@
 import * as Core from '@vercel/commerce/types/wishlist'
-import { definitions } from '../api/definitions/wishlist'
-import type { ProductEdge } from '../api/operations/get-all-products'
+import { definitions } from '../lib/api/definitions/wishlist'
+import type { ProductEdge } from '../lib/api/operations/get-all-products'
 
 export * from '@vercel/commerce/types/wishlist'
 

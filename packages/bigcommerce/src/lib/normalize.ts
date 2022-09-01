@@ -2,7 +2,7 @@ import type { Product } from '../types/product'
 import type { Cart, BigcommerceCart, LineItem } from '../types/cart'
 import type { Page } from '../types/page'
 import type { BCCategory, Category } from '../types/site'
-import { definitions } from '../api/definitions/store-content'
+import { definitions } from './api/definitions/store-content'
 import update from './immutability'
 import getSlug from './get-slug'
 
