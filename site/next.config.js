@@ -37,8 +37,8 @@ module.exports = withCommerceConfig({
   },
   env: {
     customKey: 'my-value',
-    CONTENTFUL_SPACE: 'g9q745moexic',
-    CONTENTFUL_ACCESSTOKEN: '1oYye-Bpdn4GozxDYWWxso9u889aIjorWK6uAoFn3l0',
+    CONTENTFUL_SPACE: process.env.CONTENTFUL_SPACE,
+    CONTENTFUL_ACCESSTOKEN: process.env.CONTENTFUL_ACCESSTOKEN,
   },
 })
 
