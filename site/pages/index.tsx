@@ -24,12 +24,23 @@ export async function getStaticProps({
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
+  const contentful = require('contentful')
+
+  const client = contentful.createClient({
+    space: process.env.CONTENTFUL_SPACE,
+    // environment: '<environment_id>', // defaults to 'master' if not set
+    accessToken: process.env.CONTENTFUL_ACCESSTOKEN,
+  })
+
+  const entry = await client.getEntry('w4pLeCcf4WroJgGZEVoDd')
+
   return {
     props: {
       products,
       categories,
       brands,
       pages,
+      entry,
     },
     revalidate: 60,
   }
@@ -37,7 +48,9 @@ export async function getStaticProps({
 
 export default function Home({
   products,
+  entry,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { text, title } = entry.fields
   return (
     <>
       <Grid variant="filled">
@@ -59,8 +72,10 @@ export default function Home({
         ))}
       </Marquee>
       <Hero
-        headline="Welcome to the Store!"
-        description="Cupcake ipsum dolor sit amet lemon drops pastry cotton candy. Sweet carrot cake macaroon bonbon croissant fruitcake jujubes macaroon oat cake. Soufflé bonbon caramels jelly beans. Tiramisu sweet roll cheesecake pie carrot cake. "
+        // headline="Welcome to the Store!"
+        headline={title}
+        // description="Cupcake ipsum dolor sit amet lemon drops pastry cotton candy. Sweet carrot cake macaroon bonbon croissant fruitcake jujubes macaroon oat cake. Soufflé bonbon caramels jelly beans. Tiramisu sweet roll cheesecake pie carrot cake. "
+        description={text}
       />
       <Grid layout="B" variant="filled">
         {products.slice(0, 3).map((product: any, i: number) => (

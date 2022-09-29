@@ -35,6 +35,11 @@ module.exports = withCommerceConfig({
         },
     ].filter(Boolean)
   },
+  env: {
+    customKey: 'my-value',
+    CONTENTFUL_SPACE: 'g9q745moexic',
+    CONTENTFUL_ACCESSTOKEN: '1oYye-Bpdn4GozxDYWWxso9u889aIjorWK6uAoFn3l0',
+  },
 })
 
 // Don't delete this console log, useful to see the commerce config in Vercel deployments
