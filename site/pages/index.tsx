@@ -4,6 +4,8 @@ import { ProductCard } from '@components/product'
 import { Grid, Marquee, Hero } from '@components/ui'
 // import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import { createClient } from 'next-sanity'
+import { Key, ReactChild, ReactFragment, ReactPortal } from 'react'
 
 export async function getStaticProps({
   preview,
@@ -24,6 +26,7 @@ export async function getStaticProps({
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
+  // contentful
   const contentful = require('contentful')
 
   const client = contentful.createClient({
@@ -33,6 +36,17 @@ export async function getStaticProps({
   })
 
   const entry = await client.getEntry('w4pLeCcf4WroJgGZEVoDd')
+  // end contenful
+
+  // sanity
+  const sanityClient = createClient({
+    projectId: '46g9kq0b',
+    dataset: 'production',
+    useCdn: false,
+    apiVersion: '2022-10-03',
+  })
+  const animals = await sanityClient.fetch(`*[_type == "animal"]`)
+  // end sanity
 
   return {
     props: {
@@ -41,6 +55,7 @@ export async function getStaticProps({
       brands,
       pages,
       entry,
+      animals,
     },
     revalidate: 60,
   }
@@ -49,6 +64,7 @@ export async function getStaticProps({
 export default function Home({
   products,
   entry,
+  animals,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { text, title } = entry.fields
   return (
@@ -99,6 +115,42 @@ export default function Home({
         categories={categories}
         brands={brands}
       /> */}
+      <div>
+        <h2>Animals</h2>
+        {animals.length > 0 && (
+          <ul>
+            {animals.map(
+              (animal: {
+                _id: Key | null | undefined
+                name:
+                  | boolean
+                  | ReactChild
+                  | ReactFragment
+                  | ReactPortal
+                  | null
+                  | undefined
+              }) => (
+                <li key={animal._id}>{animal?.name}</li>
+              )
+            )}
+          </ul>
+        )}
+        {animals.length == 0 && <p>No animals to show</p>}
+        {animals.length > 0 && (
+          <div>
+            <pre>{JSON.stringify(animals, null, 2)}</pre>
+          </div>
+        )}
+        {animals.length == 0 && (
+          <div>
+            <div>¯\_(ツ)_/¯</div>
+            <p>
+              Your data will show up here when you've configured everything
+              correctly
+            </p>
+          </div>
+        )}
+      </div>
     </>
   )
 }
